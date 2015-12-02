@@ -1,5 +1,5 @@
 # coding = utf-8
-# author = colorfulsummer
+# author = summer
 
 import re
 import urllib2
@@ -9,12 +9,17 @@ import time
 from bs4 import BeautifulSoup
 
 
+
 #单个url抓取数据
 def main_one(url,num,parameter):
 
     #判断URL是否可以打开
+    header = {
+        'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36'
+        }
     try:
-        fd = urllib2.urlopen(url)
+        request = urllib2.Request(url,headers=header)
+        fd = urllib2.urlopen(request)
         s = fd.read()
     except Exception,e:
         print '输入的url不能打开--',e
@@ -48,6 +53,7 @@ def main_one(url,num,parameter):
             argument[i] = soup.find(class_=parameter[i])
             argument[i] = argument[i].get_text(' ', strip=True)
         string = ' '.join(argument)
+        print string
 
         infile = open(dtime+'.txt','a+')
         infile.writelines(url)
@@ -61,6 +67,10 @@ def main_one(url,num,parameter):
 #多个url抓取数据
 def main_more(url,depth,num,parameter):
 
+    header = {
+        'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36'
+        }
+
     while depth>0:
         depth = int(depth)
         depth -= 1
@@ -69,7 +79,8 @@ def main_more(url,depth,num,parameter):
 
         #判断URL是否可以打开
         try:
-            fd = urllib2.urlopen(url_)
+            request = urllib2.Request(url_,headers=header)
+            fd = urllib2.urlopen(request)
             s = fd.read()
         except Exception,e:
             print '输入的url不能打开--',e
@@ -149,3 +160,4 @@ if __name__ == '__main__':
     else:
         print '---------------------'
         sys.exit()
+        
